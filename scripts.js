@@ -1,29 +1,41 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const itemInput = document.getElementById('itemInput');
-    const addItemButton = document.getElementById('addItemButton');
-    const itemList = document.getElementById('itemList');
+document.addEventListener("DOMContentLoaded", () => {
+  const itemInput = document.querySelector("#itemInput");
+  const addItemButton = document.querySelector("#addItemButton");
+  const itemList = document.querySelector("#itemList");
 
-    addItemButton.addEventListener('click', addItem);
+  addItemButton.addEventListener("click", handleAddItem);
 
-    function addItem() {
-        const itemText = itemInput.value.trim();
-        if (itemText === '') return;
+  function handleAddItem() {
+    const itemText = itemInput.value.trim();
+    if (itemText === "") return;
 
-        const listItem = document.createElement('li');
-        listItem.classList.add('item');
-        listItem.innerHTML = `
-            <span>${itemText}</span>
-            <button onclick="removeItem(this)">x</button>
-        `;
+    const listItem = createListItem(itemText);
+    itemList.appendChild(listItem);
 
-        itemList.appendChild(listItem);
-        itemInput.value = '';
-        itemInput.focus();
-    }
+    itemInput.value = "";
+    itemInput.focus();
+  }
 
-    window.removeItem = function(button) {
-        const listItem = button.parentElement;
-        listItem.style.animation = 'fadeOut 0.3s ease forwards';
-        listItem.addEventListener('animationend', () => listItem.remove());
-    };
+  function createListItem(text) {
+    const listItem = document.createElement("li");
+    listItem.classList.add("item");
+
+    const itemContent = document.createElement("span");
+    itemContent.textContent = text;
+
+    const removeButton = document.createElement("button");
+    removeButton.textContent = "x";
+    removeButton.addEventListener("click", handleRemoveItem);
+
+    listItem.appendChild(itemContent);
+    listItem.appendChild(removeButton);
+
+    return listItem;
+  }
+
+  function handleRemoveItem(event) {
+    const listItem = event.target.closest("li");
+    listItem.style.animation = "fadeOut 0.3s ease forwards";
+    listItem.addEventListener("animationend", () => listItem.remove());
+  }
 });
